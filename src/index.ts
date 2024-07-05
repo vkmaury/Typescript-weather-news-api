@@ -1,14 +1,20 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 import mongoose from 'mongoose';
+import router from './routes/user.routes';
+import newsRoutes from './routes/news.routes';
+import weatherRoutes from './routes/weather.routes'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app: Application = express();
-const PORT: number = 3000;
+const PORT: number = 5000;
 
 // Middleware
 app.use(express.json());
 
 // MongoDB Connection
-const mongoURI: string = 'mongodb+srv://weather-news-typescript:weather-news-typescript@cluster0.xtxlgtn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoURI: string = 'mongodb+srv://typescript-project:typescript-project@cluster0.q1zrkz0.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(mongoURI).then(() => {
     console.log('MongoDB connected...');
@@ -17,9 +23,9 @@ mongoose.connect(mongoURI).then(() => {
 });
 
 // Routes
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, TypeScript with Express and MongoDB!');
-});
+app.use('/api', router);
+app.use('/api', weatherRoutes);
+app.use('/api', newsRoutes);
 
 // Start server
 app.listen(PORT, () => {
